@@ -7,7 +7,7 @@ import Foundation
 
 final public class NetworkManager {
     private init() {}
-    static let shared: NetworkManager = NetworkManager() // Singleton Pattern
+    public static let shared: NetworkManager = NetworkManager() // Singleton Pattern
     private let jsonDecoder = JSONDecoder()
     
     public func request<T: Decodable>(_ endpoint: EndpointProtocol, completion: @escaping (Result<T, Error>) -> Void) -> Void {
