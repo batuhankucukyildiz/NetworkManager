@@ -34,7 +34,7 @@ extension User: EndpointProtocol {
     var path: String {
         switch self {
         case .login(_, _):
-            return "api/v1/user/loginUser"
+            return "/api/v1/user/loginUser"
         }
     }
     
