@@ -13,7 +13,7 @@ public enum NetworkError: LocalizedError {
     case badRequest(description: String)
     case networkError(description: String)
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .jsonDecoderError(let description),
              .authenticationError(let description),
