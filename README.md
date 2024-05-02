@@ -28,13 +28,13 @@ enum User {
 
 extension User: EndpointProtocol {
     var baseUrl: String {
-        return "https://plankton-app-2osve.ondigitalocean.app"
+        return "https://example.com"
     }
     
     var path: String {
         switch self {
         case .login(_, _):
-            return "/users/loginUser"
+            return "/user/loginUser"
         }
     }
     
