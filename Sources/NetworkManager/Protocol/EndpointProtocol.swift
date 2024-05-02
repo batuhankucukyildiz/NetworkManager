@@ -11,6 +11,7 @@ public protocol EndpointProtocol {
     var baseUrl: String { get }
     var path: String { get }
     var httpMethod: HttpMethods { get }
+    var params: [String: Any]? { get }
     var headers: [String: Any]? { get }
     func request() -> URLRequest
 }
