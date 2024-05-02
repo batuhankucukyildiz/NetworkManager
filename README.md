@@ -95,14 +95,6 @@ struct UserModel: Decodable {
 
 3️⃣ Create Service Protocol
 
-
-```swift
-struct UserModel: Decodable {
-    var id: String?
-    var username: String?
-    var email: String?
-}
-```
 ```swift
 protocol UserServiceProtocol {
     func login(username: String, password: String, completion: @escaping(Result<UserModel, Error>) -> Void) -> Void
