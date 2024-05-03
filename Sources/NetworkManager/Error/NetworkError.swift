@@ -12,13 +12,15 @@ public enum NetworkError: LocalizedError {
     case authenticationError(description: String)
     case badRequest(description: String)
     case networkError(description: String)
+    case invalidResponse(description: String)
 
     public var errorDescription: String? {
         switch self {
-        case .jsonDecoderError(let description),
-             .authenticationError(let description),
-             .badRequest(let description),
-             .networkError(let description):
+        case let .jsonDecoderError(description),
+             let .authenticationError(description),
+             let .badRequest(description),
+             let .networkError(description),
+             let .invalidResponse(description):
             return description
         }
     }
