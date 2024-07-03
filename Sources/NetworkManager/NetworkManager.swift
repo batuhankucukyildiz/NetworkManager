@@ -21,6 +21,7 @@ final public class NetworkManager {
         }
         
         do {
+            print("Response Data: \(data)")
             let jsonData = try self.jsonDecoder.decode(T.self, from: data)
             return jsonData
         } catch {
