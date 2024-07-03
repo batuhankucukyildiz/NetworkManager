@@ -28,13 +28,13 @@ enum User {
 
 extension User: EndpointProtocol {
     var baseUrl: String {
-        return "http://example.com"
+        return "https://example.com"
     }
     
     var path: String {
         switch self {
         case .login(_, _):
-            return "/api/v1/user/loginUser"
+            return "/user/loginUser"
         }
     }
     
@@ -45,6 +45,13 @@ extension User: EndpointProtocol {
         }
     }
     var headers: [String : Any]? {
+        return ["application/json": "Content-Type"]
+    }
+    
+    var params: [String : Any]? {
+        if case .login(let username, let password) = self {
+            return ["username": username, "password": password]
+        }
         return nil
     }
     
@@ -56,15 +63,24 @@ extension User: EndpointProtocol {
         let encoder = JSONEncoder()
         var request = URLRequest(url: components.url!)
         request.httpMethod = httpMethod.rawValue
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // MARK: Login User
-        if case let .login(username, password) = self {
-            request.httpBody = try? encoder.encode(["username": username, "password": password])
+        if let headers = headers {
+            for header in headers {
+                request.setValue(header.key, forHTTPHeaderField: header.value as! String)
+            }
+        }
+        if let params {
+            do {
+                let data = try JSONSerialization.data(withJSONObject: params)
+                request.httpBody = data
+            }
+            catch {
+                print(error.localizedDescription)
+            }
         }
         return request
     }
 }
+
 ```
 
 2️⃣ Create a user model
@@ -79,14 +95,6 @@ struct UserModel: Decodable {
 
 3️⃣ Create Service Protocol
 
-
-```swift
-struct UserModel: Decodable {
-    var id: String?
-    var username: String?
-    var email: String?
-}
-```
 ```swift
 protocol UserServiceProtocol {
     func login(username: String, password: String, completion: @escaping(Result<UserModel, Error>) -> Void) -> Void
