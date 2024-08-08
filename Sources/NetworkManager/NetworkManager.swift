@@ -35,7 +35,7 @@ final public class NetworkManager {
         case 200...299:
             return "Request Success"
         case 401...500:
-            throw NetworkError.authenticationError(description: "Authentication Error")
+            throw NetworkError.authenticationError(description: response.description)
         case 501...599:
             throw NetworkError.badRequest(description: "Bad Request")
         default:
