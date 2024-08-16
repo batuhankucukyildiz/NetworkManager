@@ -11,7 +11,7 @@ public enum NetworkError: LocalizedError {
     case jsonDecoderError(description: String)
     case authenticationError(code: Int)
     case badRequest(code: Int)
-    case networkError(description: String)
+    case networkError(code: Int)
     case invalidResponse(description: String)
 
     public var errorDescription: String? {

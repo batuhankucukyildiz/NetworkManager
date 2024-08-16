@@ -42,7 +42,7 @@ final public class NetworkManager {
             let code = errorResponse?.code ?? 0
             throw NetworkError.badRequest(code: code)
         default:
-            throw NetworkError.networkError(description: "Network Error")
+            throw NetworkError.networkError(code: 500)
         }
     }
 }
