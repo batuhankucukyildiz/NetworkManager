@@ -16,12 +16,13 @@ public enum NetworkError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .jsonDecoderError(description),
-             let .authenticationError(description),
-             let .badRequest(description),
-             let .networkError(description),
-             let .invalidResponse(description):
+        case .jsonDecoderError(let description),
+             .invalidResponse(let description):
             return description
+        case .authenticationError(let code),
+             .badRequest(let code),
+             .networkError(let code):
+            return "Error code: \(code)"
         }
     }
 }
