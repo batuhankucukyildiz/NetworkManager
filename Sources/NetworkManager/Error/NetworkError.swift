@@ -22,7 +22,7 @@ public enum NetworkError: LocalizedError {
         case .authenticationError(let code),
              .badRequest(let code),
              .networkError(let code):
-            return "Error code: \(code)"
+            return "\(code)"
         }
     }
 }
