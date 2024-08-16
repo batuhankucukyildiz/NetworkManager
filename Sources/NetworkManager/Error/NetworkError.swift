@@ -9,8 +9,8 @@ import Foundation
 
 public enum NetworkError: LocalizedError {
     case jsonDecoderError(description: String)
-    case authenticationError(description: String)
-    case badRequest(description: String)
+    case authenticationError(code: Int)
+    case badRequest(code: Int)
     case networkError(description: String)
     case invalidResponse(description: String)
 
