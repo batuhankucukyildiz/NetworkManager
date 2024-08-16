@@ -45,7 +45,7 @@ public class MockEndpointProtocol: EndpointProtocol {
     public var body: Data?
     
     public func request() throws -> URLRequest {
-        guard let url = URL(string: baseURL + path) else { throw NetworkError.badRequest(description: "URL is not valid") }
+        guard let url = URL(string: baseURL + path) else { throw NetworkError.badRequest(code: 400) }
         return URLRequest(url: url)
     }
     
