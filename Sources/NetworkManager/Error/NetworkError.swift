@@ -27,4 +27,10 @@ public enum NetworkError: LocalizedError {
             return "\(code) \(remainingTries)"
         }
     }
+    public func parseAcceptableResponse() -> (code: Int, remainingTries: Int)? {
+        if case .acceptableResponse(let code, let remainingTries) = self {
+            return (code, remainingTries)
+        }
+        return nil
+    }
 }
