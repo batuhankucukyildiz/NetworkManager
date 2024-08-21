@@ -13,7 +13,7 @@ public enum NetworkError: LocalizedError {
     case badRequest(code: Int)
     case networkError(code: Int)
     case invalidResponse(description: String)
-
+    case acceptableResponse(code: Int, remainingTries: Int)
     public var errorDescription: String? {
         switch self {
         case .jsonDecoderError(let description),
@@ -23,6 +23,8 @@ public enum NetworkError: LocalizedError {
              .badRequest(let code),
              .networkError(let code):
             return "\(code)"
+        case .acceptableResponse(let code, let remainingTries):
+            return "\(code) \(remainingTries)"
         }
     }
 }

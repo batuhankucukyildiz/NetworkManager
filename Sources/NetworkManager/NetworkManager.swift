@@ -34,9 +34,17 @@ final public class NetworkManager {
         case 200...299:
             return "Request Success"
         case 401...499:
-            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-            let code = errorResponse?.code ?? 0
-            throw NetworkError.authenticationError(code: code)
+            if response.statusCode == 406 {
+                let errorResponse = try? JSONDecoder().decode(RatingErrorResponse.self, from: data)
+                let code = errorResponse?.error.code ?? 0
+                let remainingTries = errorResponse?.remainingTries ?? 3
+                throw NetworkError.acceptableResponse(code: code, remainingTries: remainingTries)
+            }
+            else {
+                let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+                let code = errorResponse?.code ?? 0
+                throw NetworkError.badRequest(code: code)
+            }
         case 500...599:
             let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
             let code = errorResponse?.code ?? 0
