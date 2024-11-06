@@ -2,7 +2,7 @@ import UIKit
 
 final public class NetworkManager {
     private init() {}
-    public static let shared: NetworkManager = NetworkManager() // Singleton Pattern
+    public static let shared: NetworkManager = NetworkManager()
     private let jsonDecoder = JSONDecoder()
     
     public func request<T: Decodable>(_ endpoint: EndpointProtocol) async throws -> T {
@@ -12,26 +12,22 @@ final public class NetworkManager {
             throw NetworkError.invalidResponse(description: "Invalid Response")
         }
         
-        // Yanıtın Content-Type'ının "image" ile başlayıp başlamadığını kontrol et
         if let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
            contentType.hasPrefix("image") {
-            if T.self == UIImage.self {
-                // Eğer T UIImage ise, veriyi UIImage olarak döndür
-                guard let image = UIImage(data: data) else {
-                    throw NetworkError.invalidResponse(description: "Failed to decode image data")
-                }
-                return image as! T
+            print("data: \(data)")
+            if T.self == UIImage.self, let image = UIImage(data: data) {
+                return image as! T // Bu durumda T UIImage olmalı
             } else {
                 throw NetworkError.invalidResponse(description: "Expected image but found other data type")
             }
         }
         
-        // Eğer JSON ise, JSON yanıtını çözümleyin
         do {
+            print("Response Data: \(data)")
             let jsonData = try self.jsonDecoder.decode(T.self, from: data)
             return jsonData
         } catch {
-            throw NetworkError.invalidResponse(description: "Failed to decode JSON response")
+            throw error
         }
     }
 
