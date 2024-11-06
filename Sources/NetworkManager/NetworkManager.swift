@@ -1,4 +1,6 @@
 import Foundation
+import UIKit
+
 final public class NetworkManager {
     private init() {}
     public static let shared: NetworkManager = NetworkManager() // Singleton Pattern
@@ -11,15 +13,13 @@ final public class NetworkManager {
             throw NetworkError.invalidResponse(description: "Invalid Response")
         }
         
-        do {
-            let callbackResponse = try await handleNetworkRequest(response: httpResponse, data: data)
-            #if DEBUG
-            print("\(callbackResponse)")
-            #endif
-        } catch {
-            throw error
+        if let mimeType = response.mimeType, mimeType.hasPrefix("image") {
+            if T.self == UIImage.self, let image = UIImage(data: data) {
+                return image as! T
+            } else {
+                throw NetworkError.invalidResponse(description: "Expected image but found other data type")
+            }
         }
-        
         do {
             print("Response Data: \(data)")
             let jsonData = try self.jsonDecoder.decode(T.self, from: data)
