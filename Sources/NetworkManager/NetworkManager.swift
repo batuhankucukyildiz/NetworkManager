@@ -1,9 +1,8 @@
-import Foundation
 import UIKit
 
 final public class NetworkManager {
     private init() {}
-    public static let shared: NetworkManager = NetworkManager() // Singleton Pattern
+    public static let shared: NetworkManager = NetworkManager() 
     private let jsonDecoder = JSONDecoder()
     
     public func request<T: Decodable>(_ endpoint: EndpointProtocol) async throws -> T {
@@ -13,13 +12,15 @@ final public class NetworkManager {
             throw NetworkError.invalidResponse(description: "Invalid Response")
         }
         
-        if let mimeType = response.mimeType, mimeType.hasPrefix("image") {
+        if let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
+           contentType.hasPrefix("image") {
             if T.self == UIImage.self, let image = UIImage(data: data) {
-                return image as! T
+                return image as! T // Bu durumda T UIImage olmalı
             } else {
                 throw NetworkError.invalidResponse(description: "Expected image but found other data type")
             }
         }
+        
         do {
             print("Response Data: \(data)")
             let jsonData = try self.jsonDecoder.decode(T.self, from: data)
@@ -39,8 +40,7 @@ final public class NetworkManager {
                 let code = errorResponse?.error.code ?? 0
                 let remainingTries = errorResponse?.remainingTries ?? 3
                 throw NetworkError.acceptableResponse(code: code, remainingTries: remainingTries)
-            }
-            else {
+            } else {
                 let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
                 let code = errorResponse?.code ?? 0
                 throw NetworkError.badRequest(code: code)
