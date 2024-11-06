@@ -39,7 +39,6 @@ final public class NetworkManager {
         
         if let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
            contentType.hasPrefix("image") {
-            print("Image data: \(data.base64EncodedString())")
             if let image = UIImage(data: data) {
                 return image
             } else {
