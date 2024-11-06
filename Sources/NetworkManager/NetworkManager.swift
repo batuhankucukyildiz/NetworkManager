@@ -15,8 +15,8 @@ final public class NetworkManager {
         if let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
            contentType.hasPrefix("image") {
             print("data: \(data.base64EncodedString())")
-            if T.self == UIImage.self, let image = UIImage(data: data) {
-                return image as! T // Bu durumda T UIImage olmalı
+            if let image = UIImage(data: data, scale: 1.0) {
+                return image as! T
             } else {
                 throw NetworkError.invalidResponse(description: "Expected image but found other data type")
             }
