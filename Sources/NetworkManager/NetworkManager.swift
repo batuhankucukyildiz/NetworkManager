@@ -13,9 +13,10 @@ final public class NetworkManager {
         }
         
         if let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
-           contentType.hasPrefix("image") {
+           contentType.hasPrefix("image"),
+           T.self == UIImage.self {
             print("data: \(data.base64EncodedString())")
-            if let image = UIImage(data: data, scale: 1.0) {
+            if let image = UIImage(data: data) {
                 return image as! T
             } else {
                 throw NetworkError.invalidResponse(description: "Expected image but found other data type")
@@ -30,6 +31,7 @@ final public class NetworkManager {
             throw error
         }
     }
+
 
     private func handleNetworkRequest(response: HTTPURLResponse, data: Data) async throws -> String {
         switch response.statusCode {
