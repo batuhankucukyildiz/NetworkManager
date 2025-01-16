@@ -10,7 +10,7 @@ import Foundation
 public struct ErrorResponse: Decodable, Error {
     let code: String
     let status: Int
-    let priority: Int
+    let priority: String
     let success: Bool
     let message: String
 }
