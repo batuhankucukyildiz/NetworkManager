@@ -53,24 +53,15 @@ final public class NetworkManager {
         switch response.statusCode {
         case 200...299:
             return "Request Success"
-        case 401...499:
-            if response.statusCode == 406 {
-                let errorResponse = try? JSONDecoder().decode(RatingErrorResponse.self, from: data)
-                let code = errorResponse?.error.code ?? 0
-                let remainingTries = errorResponse?.remainingTries ?? 3
-                throw NetworkError.acceptableResponse(code: code, remainingTries: remainingTries)
+        case 400...599:
+            if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                throw errorResponse
+            } else {
+                throw NetworkError.invalidResponse(description: "Unable to decode error response")
             }
-            else {
-                let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-                let code = errorResponse?.code ?? 0
-                throw NetworkError.badRequest(code: code)
-            }
-        case 500...599:
-            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-            let code = errorResponse?.code ?? 0
-            throw NetworkError.badRequest(code: code)
         default:
             throw NetworkError.networkError(code: 500)
         }
     }
+
 }
