@@ -15,7 +15,7 @@ final public class NetworkManager {
         do {
             let callbackResponse = try await handleNetworkRequest(response: httpResponse, data: data)
             #if DEBUG
-            print("\(callbackResponse)")
+            print("callbackResponse: \(callbackResponse)")
             #endif
         } catch {
             throw error
